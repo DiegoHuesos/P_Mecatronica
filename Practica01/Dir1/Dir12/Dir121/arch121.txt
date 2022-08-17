@@ -1,0 +1,143 @@
+1  ls
+    2  pwd
+    3  ls -la
+    4  ls
+    5  pwd
+    6  git clone git@github.com:DiegoHuesos/P_Mecatronica.git
+    7  git clone https://github.com/DiegoHuesos/P_Mecatronica.git
+    8  ls
+    9  cd P_Mecatronica/
+   10  ls -la
+   11  mkdir Practica01
+   12  mkdir Dir1
+   13  cd Dir1/
+   14  mkdir Dir11
+   15  mkdir 12
+   16  cd Dir11
+   17  mkdir Dir111
+   18  mkdir Dir112
+   19  mkdir Dir113
+   20  cd Dir111
+   21  touch arc111.txt
+   22  ls
+   23  cd ..
+   24  cd Dir112
+   25  touch arch112.py
+   26  ls
+   27  cd ..
+   28  ls
+   29  cd ..
+   30  ls
+   31  rm -r 12
+   32  ls
+   33  tree
+   34  sudo apt install tree
+   35  tree
+   36  sudo apt update
+   37  sudo apt-get install tree
+   38  tree
+   39  pwd
+   40  tree
+   41  ls
+   42  mkdir Dir12
+   43  cd Dir12
+   44  mkdir Dir121
+   45  cd Dir121/
+   46  touch arch121.txt
+   47  mkdir Dir1212
+   48  cd Dir1212/
+   49  touch arch1212.txt
+   50  tree
+   51  cd ..
+   52  cd ../../..
+   53  ls
+   54  cd Dir1/
+   55  ls
+   56  tree
+   57  cd ..
+   58  tree
+   59  ls
+   60  mv Dir1 Practica01/
+   61  ls
+   62  cd Practica01/
+   63  cp Dir1/ Dir1_cp/
+   64  cp Dir1/ Dir1_cp/ -r
+   65  ls
+   66  tree
+   67  cp --help
+   68  ls
+   69  mv Dir1_cp/ Copia_dir
+   70  ls
+   71  tree
+   72  cd Dir1/Dir11/Dir111/
+   73  ls
+   74  nano arch111.txt
+   75  ls
+   76  rm arc111.txt
+   77  ls
+   78  cat arch111.txt
+   79  cd ../../..
+   80  ls
+   81  cd ..
+   82  ls
+   83  git status
+   84  git add .
+   85  git status
+   86  git commit -m "Initial Commit - Practica 01"
+   87  git config --global user.email "diegohd_98@hotmail.com"
+   88  git config --global.user.name "DiegoHuesos"
+   89  git config --global user.name "DiegoHuesos"
+   90  git status
+   91  git commit -m "Inital Commit - Practica 01"
+   92  git status
+   93  git push
+   94  ssh-keygen -t ed25519 -C "diegohd_98@hotmail.com"
+   95  $ eval "$(ssh-agent -s)"
+   96  eval "$(ssh-agent -s)"
+   97  ls
+   98  ls -la
+   99  cd ..
+  100  ls
+  101  cd ..
+  102  ls
+  103  cd ..
+  104  ls
+  105  ls -la
+  106  cd .ssh
+  107  cd
+  108  ls
+  109  ssh-add ~/.ssh/id_ed25519
+  110  ls
+  111  cclip < ~/.ssh/id_ed25519.pub
+  112  clip < ~/.ssh/id_ed25519.pub
+  113  sudo apt install geomview
+  114  clip < ~/.ssh/id_ed25519.pub
+  115  cd ~/.ssh/
+  116  ls
+  117  nano id_ed25519.pub
+  118  cd
+  119  ls
+  120  cd P_Mecatronica/
+  121  git status
+  122  git push
+  123  git push git@github.com:DiegoHuesos/P_Mecatronica.git
+  124  git remote add origin git@github.com:DiegoHuesos/P_Mecatronica.git
+  125  git remote
+  126  ls
+  127  cd Practica01/
+  128  ls
+  129  rm -r Copia_dir/
+  130  ls
+  131  cd ..
+  132  ls
+  133  git status
+  134  git add .
+  135  git commit -m "Copia_dir deleted."
+  136  git push
+  137  git push origin master
+  138  git remote -v
+  139  git remote set-url origin git@github.com:DiegoHuesos/P_Mecatronica.git
+  140  git push
+  141  git status
+  142  top
+  143  history
