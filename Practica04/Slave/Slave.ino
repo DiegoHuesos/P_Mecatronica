@@ -13,7 +13,7 @@ void setup() {
 
 void loop() {
   Serial.println(dato);
-  delay(100);
+  delay(99);
 }
 
 void lectura(int howMany){
