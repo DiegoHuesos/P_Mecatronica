@@ -14,27 +14,30 @@
 
 
 //LIBRERÍAS
+#include <Wire.h> 
 #include <LiquidCrystal_I2C.h>    //Librería para pantalla LCD
-#include "DHT.h"                  //Librería para sensor de luminosidad
+#include "DHT.h"                
+
+//Librería para sensor de luminosidad
 
 
 //DEFINICIÓN DE PUERTOS
 #define outLed 13                 //Led   
 #define inVoltVoltimetro A0       //Sensor de voltaje
 #define inVoltLuminosidad A1      //Sensor de luminosidad
-#define DHTPIN 21                 //Sensor de temperatura
+#define DHTPIN 10                 //Sensor de temperatura
 #define DHTTYPE DHT11             //Define luminosidad
-#define echoPin 9                 //Puerto de echo, sensor ultrasónico
-#define trigPin 10                //Puerto de trigger, sensor ultrasónico
+#define echoPin 6                 //Puerto de echo, sensor ultrasónico
+#define trigPin 7                //Puerto de trigger, sensor ultrasónico
 #define inVoltSharp A2            //Sensor Sharp
 
 
 //DEFINICIÓN DE VARIABLES
-int voltimetro;
-int luminosidad;
-int temperaturaHumedad;
-int ultrasonico;
-int sharp;
+int voltimetroValue;
+int luminosidadValue;
+int temperaturaHumedadValue;
+int ultrasonicoValue;
+int sharpValue;
 //lcd
 LiquidCrystal_I2C lcd(0x27,16,2);  //Set the LCD address to 0x27 for a 16 chars and 2 line display
 //Voltímetro
@@ -59,6 +62,8 @@ int resultadoSensores;
 
 //FUNCIÓN SETUP
 void setup() {
+  Serial.begin(9600);
+  
   //Asignación de la modalidad de los pines
   pinMode(outLed, OUTPUT);
   pinMode(inVoltLuminosidad, INPUT);
@@ -66,17 +71,21 @@ void setup() {
   pinMode(trigPin, OUTPUT); 
   pinMode(echoPin, INPUT); 
   pinMode(inVoltSharp, INPUT); 
+  Serial.println("setup");
   //Inicialización del la pantalla LCD
   lcd.init();    
   lcd.backlight();
-  lcd.setCursor(0,0);
-  lcd.clear();
+  //lcd.setCursor(0,0);
+  //lcd.clear();
+  Serial.println("lcd");
   //Inicialización de la comunicación con el sensor de humedad
   dht.begin();
   //Inicialización de la comunicación serial
-  Serial.begin(9600);
-  while (!Serial) { ; // wait for serial port to connect. Needed for native USB port only}
-  Serial.println("setup");
+  //Serial.begin(9600);
+  //while (!Serial) {  // wait for serial port to connect. Needed for native USB port only
+  //  ;
+  //}
+  //Serial.println("setup");
 }
 
 
@@ -84,45 +93,45 @@ void setup() {
 //FUNCIÓN LOOP
 void loop() {
   //Invocar funciones auxiliares y guardar sus valores en variables
-  voltimetro = voltimetro();
-  luminosidad = luminosidad()
-  temperaturaHumedad = temperaturaHumedad();
-  ultrasonico = ultrasonico();
-  sharp = sharp();
+  voltimetroValue = voltimetro();
+  luminosidadValue = luminosidad();
+  temperaturaHumedadValue = temperaturaHumedad();
+  ultrasonicoValue = ultrasonico();
+  sharpValue = sharp();
 
   //Escribir el valor de la luminosidad en primer renglón del LCD
   lcd.setCursor(0,0);
   lcd.print("                  ");
   lcd.setCursor(0,0);
   lcd.print("L: ");
-  lcd.print(luminosidad);
+  lcd.print(String(luminosidadValue));
   lcd.print(" bits");
 
   //Validación de errores
-  resultadoSensores = voltimetro + luminosidad + temperaturaHumedad + ultrasonico + sharp;
+  resultadoSensores = voltimetroValue + temperaturaHumedadValue + ultrasonicoValue + sharpValue;
   errorMessage = "";
   if(resultadoSensores > 0){     //Si hay al menos un error
     digitalWrite(outLed, HIGH);   //Se enciende el led
 
     if(resultadoSensores == 1){  //Si solo hay un error se agrega el correspondiente mensaje
-      if(voltimetro == 1)
+      if(voltimetroValue == 1)
         errorMessage= "Low Battery";
-      if(temperaturaHumedad == 1)
+      if(temperaturaHumedadValue == 1)
         errorMessage = "Overheating";
-      if(ultrasonico == 1)
+      if(ultrasonicoValue == 1)
         errorMessage = "U_Obstacle";
-      if(sharp == 1)
+      if(sharpValue == 1)
         errorMessage = "S_Obstacle";
     }else{                          //Si hay más de un error se construye el mensaje (Forma abreviada)
-      if(voltimetro == 1)
+      if(voltimetroValue == 1)
         errorMessage += "Bt-";
-      if(temperaturaHumedad == 1)
+      if(temperaturaHumedadValue == 1)
         errorMessage += "Tmp-";
-      if(ultrasonico==1)
+      if(ultrasonicoValue == 1)
         errorMessage += "UObs-";
-      if(sharp==1)
+      if(sharpValue == 1)
         errorMessage += "SObs-";
-      errorMessage = errorMessage.substr(0, errorMessage.length()-1);  //Se le quita el último guión del string
+      errorMessage = errorMessage.substring(0, errorMessage.length()-1);  //Se le quita el último guión del string
     }
   }else{ //Si no hay ningún error, se apaga el led y el mensaje de error está vacío
     digitalWrite(outLed, LOW);
@@ -139,13 +148,13 @@ void loop() {
 //FUNCIONES AUXILIARES
 
 int voltimetro(){
-  voltVoltimetro = analogRead(inVoltVoltimetro)*5/1023;
+  voltVoltimetro = analogRead(inVoltVoltimetro); //*5/1023;
 
   Serial.print("V: ");
   Serial.print(voltVoltimetro);
   Serial.print(" bits -- ");
 
-  if(voltVoltimetro < 6.4)
+  if(voltVoltimetro < 687)  //687 bits ==> 6.4 V
     return 1;
   else
     return 0;
@@ -164,7 +173,7 @@ float luminosidad(){
 }
 
 int temperaturaHumedad(){
-  if (Serial.available() > 0){
+ 
 
     tempC = dht.readTemperature();
     
@@ -172,16 +181,16 @@ int temperaturaHumedad(){
     Serial.print(tempC);
     Serial.print(" ºC -- ");
 
-    if (isnan(humedad) || isnan(tempC) || isnan(tempF)) {
+    if ( isnan(tempC)  ) {
       Serial.println(F("Failed to read from DHT sensor!"));
-      return;
+      return 1;
     }
   
-    if(tempC >= 25)
+    if(tempC >= 22)
       return 1;
     else
       return 0;
-  }
+  
 }
 
 int ultrasonico(){
@@ -192,7 +201,7 @@ int ultrasonico(){
   digitalWrite(trigPin, LOW);
 
   duracionUltrasonico = pulseIn(echoPin, HIGH);
-  distanciaUltrasonico = duracion * 0.0343 / 2;
+  distanciaUltrasonico = duracionUltrasonico * 0.0343 / 2;
 
   Serial.print("DU: ");
   Serial.print(distanciaUltrasonico);
